@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F8FAFC">
+<title>FirstAid KZ — первая помощь офлайн</title>
+<style>
+/* ============================================================
+   DESIGN SYSTEM — FirstAid KZ
+   ============================================================ */
+:root{
+  --bg:#F8FAFC;
+  --surface:#FFFFFF;
+  --text:#0F172A;
+  --muted:#475569;
+  --border:#E2E8F0;
+
+  --sos:#DC2626;
+  --sos-hover:#B91C1C;
+  --red-soft:#FEF2F2;
+
+  --accent:#0284C7;
+  --accent-dark:#0369A1;
+  --accent-soft:#E0F2FE;
+
+  --green:#16A34A;
+  --green-soft:#DCFCE7;
+
+  --radius:16px;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.06);
+  --shadow:0 6px 20px rgba(15,23,42,.08);
+  --t:.2s ease;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:92px;
+}
+body.no-scroll{overflow:hidden}
+h1,h2,h3,p,ul{margin:0}
+ul{padding:0;list-style:none}
+button{font-family:inherit}
+a{color:inherit}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.app-header{
+  position:sticky;top:0;z-index:60;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.header-inner{
+  max-width:1080px;margin:0 auto;
+  padding:10px 16px;
+  display:flex;align-items:center;gap:10px;
+}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{
+  width:38px;height:38px;flex:none;border-radius:11px;
+  background:var(--accent);color:#fff;
+  display:grid;place-items:center;
+  font-size:22px;font-weight:800;line-height:1;
+  box-shadow:0 2px 10px rgba(2,132,199,.28);
+}
+.brand-col{display:flex;flex-direction:column;gap:2px;min-width:0}
+.brand-name{font-weight:800;font-size:15px;letter-spacing:-.01em;white-space:nowrap}
+.offline{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;
+  color:#15803D;background:var(--green-soft);
+  padding:2px 7px;border-radius:6px;white-space:nowrap;
+}
+.offline::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green)}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+
+.lang{display:flex;background:#F1F5F9;border-radius:10px;padding:3px;gap:2px}
+.lang button{
+  border:0;background:transparent;color:var(--muted);
+  font-size:13px;font-weight:800;letter-spacing:.02em;
+  padding:7px 10px;border-radius:8px;min-height:34px;cursor:pointer;
+  transition:all var(--t);
+}
+.lang button:hover{color:var(--text)}
+.lang button.active{background:#fff;color:var(--accent);box-shadow:var(--shadow-sm)}
+
+.sos-btn{
+  border:0;background:var(--sos);color:#fff;
+  font-weight:800;font-size:13px;letter-spacing:.02em;
+  padding:0 14px;min-height:44px;border-radius:11px;
+  white-space:nowrap;cursor:pointer;
+  box-shadow:0 2px 10px rgba(220,38,38,.3);
+  transition:background var(--t),transform var(--t);
+}
+.sos-btn:hover{background:var(--sos-hover)}
+.sos-btn:active{transform:scale(.97)}
+
+@media (max-width:420px){
+  .sos-btn{font-size:12px;padding:0 10px}
+  .brand-name{font-size:14px}
+}
+
+/* ============================================================
+   TAB BAR (mobile fixed / desktop inline)
+   ============================================================ */
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:55;
+  display:flex;gap:4px;
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));
+  background:rgba(255,255,255,.97);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-top:1px solid var(--border);
+}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  border:0;background:transparent;color:var(--muted);
+  font-size:11px;font-weight:700;line-height:1.15;
+  padding:8px 4px;min-height:56px;border-radius:12px;cursor:pointer;
+  transition:all var(--t);text-align:center;
+}
+.tab-ico{font-size:19px;line-height:1}
+.tab.active{color:var(--accent);background:var(--accent-soft)}
+
+@media (min-width:768px){
+  body{padding-bottom:32px}
+  .tabbar{
+    position:static;max-width:1080px;margin:0 auto;
+    background:transparent;border:0;padding:14px 16px 0;
+    justify-content:flex-start;gap:8px;
+  }
+  .tab{
+    flex:none;flex-direction:row;gap:8px;
+    padding:10px 16px;min-height:44px;font-size:14px;
+    background:#fff;border:1px solid var(--border);border-radius:12px;
+  }
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .tab:hover:not(.active){border-color:var(--accent);color:var(--accent)}
+}
+
+/* ============================================================
+   MAIN LAYOUT
+   ============================================================ */
+main{max-width:1080px;margin:0 auto;padding:16px}
+.page-title{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.page-sub{color:var(--muted);font-size:14px;margin-top:6px}
+
+/* ---------- QR ---------- */
+.qr-btn{
+  width:100%;margin-top:16px;min-height:66px;
+  display:flex;align-items:center;gap:12px;text-align:left;
+  background:#fff;border:1.5px dashed var(--accent);
+  border-radius:14px;padding:12px 14px;cursor:pointer;
+  transition:background var(--t),transform var(--t);
+}
+.qr-btn:hover{background:var(--accent-soft)}
+.qr-btn:active{transform:scale(.99)}
+.qr-ico{
+  width:40px;height:40px;flex:none;border-radius:11px;
+  background:var(--accent-soft);color:var(--accent-dark);
+  display:grid;place-items:center;font-size:19px;
+}
+.qr-txt{display:flex;flex-direction:column;gap:1px;min-width:0}
+.qr-txt strong{font-size:14.5px;font-weight:800;letter-spacing:-.01em}
+.qr-txt small{font-size:12px;color:var(--muted);line-height:1.35}
+
+.note{
+  display:flex;gap:8px;align-items:flex-start;
+  margin-top:12px;padding:10px 12px;border-radius:12px;
+  background:#F1F5F9;color:var(--muted);font-size:12.5px;line-height:1.45;
+}
+
+/* ---------- SCENARIO GRID ---------- */
+.scenario-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px;
+}
+@media (min-width:600px){.scenario-grid{grid-template-columns:repeat(3,1fr);gap:14px}}
+@media (min-width:900px){.scenario-grid{grid-template-columns:repeat(4,1fr)}}
+
+.scenario-card{
+  display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:14px;min-height:118px;
+  text-align:left;cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:transform var(--t),box-shadow var(--t),border-color var(--t);
+}
+.scenario-card:hover{border-color:var(--accent);box-shadow:var(--shadow);transform:translateY(-2px)}
+.scenario-card:active{transform:scale(.98)}
+.sc-ico{font-size:24px;line-height:1}
+.sc-title{font-size:15px;font-weight:800;line-height:1.25;letter-spacing:-.01em}
+.sc-meta{font-size:11.5px;font-weight:700;color:var(--muted);margin-top:auto}
+
+/* ---------- PLAYER ---------- */
+.player{max-width:720px;margin:0 auto;animation:fade .2s ease}
+.link-btn{
+  border:0;background:transparent;color:var(--accent);
+  font-size:14px;font-weight:800;cursor:pointer;
+  padding:8px 0;min-height:44px;
+}
+.link-btn:hover{color:var(--accent-dark)}
+.player-head{display:flex;align-items:center;gap:12px;margin:4px 0 14px}
+.player-icon{
+  width:52px;height:52px;flex:none;border-radius:14px;
+  background:var(--accent-soft);display:grid;place-items:center;font-size:26px;
+}
+.player-title{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.player-meta{font-size:13px;font-weight:700;color:var(--muted)}
+
+.progress{height:6px;border-radius:99px;background:#E2E8F0;overflow:hidden;margin-bottom:14px}
+.progress-fill{height:100%;border-radius:99px;background:var(--accent);transition:width var(--t)}
+
+.step-card{
+  background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;box-shadow:var(--shadow-sm);animation:fadeUp .2s ease;
+}
+.step-num{
+  font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px;
+}
+.step-card h2{font-size:19px;font-weight:800;line-height:1.3;letter-spacing:-.01em;margin-bottom:8px}
+.step-card > p{font-size:15px;color:var(--muted);line-height:1.55}
+
+.dont{
+  margin-top:16px;padding:12px 14px;border-radius:12px;
+  border:2px solid #FCA5A5;background:var(--red-soft);
+}
+.dont-head{
+  display:flex;gap:6px;align-items:center;
+  font-size:12px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--sos);margin-bottom:5px;
+}
+.dont p{font-size:14px;line-height:1.5;color:#7F1D1D}
+
+.player-nav{display:flex;gap:10px;margin-top:16px}
+
+.btn{
+  flex:1;min-height:54px;padding:0 16px;
+  border-radius:14px;border:1px solid transparent;
+  font-size:16px;font-weight:800;cursor:pointer;
+  transition:background var(--t),color var(--t),border-color var(--t),transform var(--t);
+}
+.btn:active:not(:disabled){transform:scale(.98)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 10px rgba(2,132,199,.26)}
+.btn-primary:hover:not(:disabled){background:var(--accent-dark)}
+.btn-secondary{background:#fff;color:var(--text);border-color:var(--border)}
+.btn-secondary:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+
+/* ---------- TRUST BADGE ---------- */
+.trust{
+  margin-top:14px;padding:12px 14px;border-radius:12px;
+  background:#F0F9FF;border:1px dashed #BAE6FD;
+}
+.trust-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:700}
+.trust-check{
+  width:18px;height:18px;flex:none;border-radius:50%;
+  background:var(--green);color:#fff;
+  display:grid;place-items:center;font-size:11px;font-weight:900;
+}
+.trust-pill{
+  font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;
+  background:#fff;border:1px solid #BAE6FD;color:var(--accent-dark);
+  border-radius:99px;padding:2px 8px;
+}
+.trust-meta{font-size:12px;font-weight:600;color:var(--muted);margin-top:6px}
+
+/* ---------- QUIZ ---------- */
+.quiz-wrap{max-width:720px;margin:0 auto;animation:fade .2s ease}
+.quiz-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:16px 0 10px}
+.quiz-count{font-size:13px;font-weight:700;color:var(--muted)}
+.quiz-score{font-size:13px;font-weight:900;color:var(--accent)}
+.quiz-card{
+  background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;box-shadow:var(--shadow-sm);
+}
+.quiz-q{font-size:18px;font-weight:800;line-height:1.35;letter-spacing:-.01em;margin-bottom:14px}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-option{
+  display:flex;align-items:center;gap:10px;
+  min-height:56px;padding:13px 14px;
+  text-align:left;font-size:15px;font-weight:600;color:var(--text);
+  background:#fff;border:1.5px solid var(--border);border-radius:12px;
+  cursor:pointer;transition:all var(--t);
+}
+.quiz-option:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}
+.quiz-option:disabled{cursor:default}
+.opt-letter{
+  width:26px;height:26px;flex:none;border-radius:8px;
+  background:#F1F5F9;color:var(--muted);
+  display:grid;place-items:center;font-size:12px;font-weight:900;
+}
+.quiz-option.is-correct{border-color:var(--green);background:#F0FDF4}
+.quiz-option.is-correct .opt-letter{background:var(--green);color:#fff}
+.quiz-option.is-wrong{border-color:var(--sos);background:var(--red-soft)}
+.quiz-option.is-wrong .opt-letter{background:var(--sos);color:#fff}
+.quiz-option.is-dim{opacity:.55}
+
+.explain{
+  margin-top:14px;padding:14px;border-radius:12px;
+  font-size:14px;line-height:1.5;animation:fadeUp .2s ease;
+}
+.explain.ok{background:#F0FDF4;border:1px solid #BBF7D0;color:#166534}
+.explain.bad{background:var(--red-soft);border:1px solid #FECACA;color:#991B1B}
+.explain strong{display:block;margin-bottom:5px;font-size:14px}
+
+.result{
+  background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+  padding:24px;text-align:center;box-shadow:var(--shadow-sm);
+}
+.result-label{font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.result-score{font-size:46px;font-weight:900;letter-spacing:-.03em;color:var(--accent);line-height:1.1;margin-top:4px}
+.result-msg{margin:12px 0 8px;font-size:15px;color:var(--muted);line-height:1.5}
+.result-best{font-size:13px;color:var(--muted);margin-bottom:18px}
+
+/* ---------- COURSES ---------- */
+.course-grid{display:grid;gap:14px;margin-top:18px}
+@media (min-width:760px){.course-grid{grid-template-columns:repeat(2,1fr)}}
+.course-card{
+  display:flex;flex-direction:column;
+  background:#fff;border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;box-shadow:var(--shadow-sm);
+  transition:box-shadow var(--t),border-color var(--t);
+}
+.course-card:hover{box-shadow:var(--shadow)}
+.course-card.is-highlight{border-color:var(--accent)}
+.course-card h2{font-size:17px;font-weight:800;line-height:1.3;letter-spacing:-.01em}
+.course-badge{
+  align-self:flex-start;margin-top:8px;
+  font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;
+  background:var(--accent-soft);color:var(--accent-dark);
+  padding:3px 9px;border-radius:99px;
+}
+.course-price{font-size:26px;font-weight:900;letter-spacing:-.02em;margin:12px 0 10px}
+.course-features{display:flex;flex-direction:column;gap:7px;font-size:13.5px;color:var(--muted);margin-bottom:18px}
+.course-features li{display:flex;gap:8px;line-height:1.4}
+.course-features li::before{content:"✓";color:var(--green);font-weight:900;flex:none}
+.course-card .btn{margin-top:auto}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+.overlay{
+  position:fixed;inset:0;z-index:100;
+  display:flex;align-items:flex-end;justify-content:center;
+  background:rgba(15,23,42,.55);
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  animation:fade .18s ease;
+}
+@media (min-width:600px){.overlay{align-items:center;padding:24px}}
+
+.modal{
+  width:100%;max-width:520px;max-height:92vh;overflow:auto;
+  background:#fff;border-radius:20px 20px 0 0;
+  padding:20px;animation:slideUp .2s ease;
+}
+@media (min-width:600px){
+  .modal{border-radius:20px;animation:pop .2s ease}
+}
+
+.modal-head{display:flex;align-items:flex-start;gap:12px;justify-content:space-between}
+.modal h2{font-size:20px;font-weight:800;letter-spacing:-.02em;line-height:1.25}
+.modal-sub{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.45}
+.icon-btn{
+  flex:none;width:36px;height:36px;border:0;border-radius:10px;
+  background:#F1F5F9;color:var(--muted);font-size:16px;cursor:pointer;
+  transition:all var(--t);
+}
+.icon-btn:hover{background:#E2E8F0;color:var(--text)}
+
+.call-btn{
+  display:flex;align-items:center;gap:12px;
+  margin-top:12px;padding:13px 16px;min-height:66px;
+  border-radius:14px;color:#fff;text-decoration:none;
+  transition:background var(--t),transform var(--t);
+}
+.call-btn:active{transform:scale(.98)}
+.call-112{background:var(--sos)}
+.call-112:hover{background:var(--sos-hover)}
+.call-103{background:var(--accent)}
+.call-103:hover{background:var(--accent-dark)}
+.call-num{font-size:25px;font-weight:900;letter-spacing:-.02em;line-height:1}
+.call-name{font-size:13.5px;font-weight:700;opacity:.95;line-height:1.25}
+.call-arrow{margin-left:auto;font-size:18px;opacity:.9}
+
+.memo{margin-top:18px;padding:14px;border-radius:14px;background:#F8FAFC;border:1px solid var(--border)}
+.memo h3{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px}
+.memo li{display:flex;gap:8px;font-size:13.5px;line-height:1.45;padding:5px 0;color:var(--text)}
+.memo li::before{content:"•";color:var(--accent);font-weight:900;flex:none}
+.sos-note{
+  margin-top:14px;padding:10px 12px;border-radius:12px;
+  background:var(--accent-soft);color:var(--accent-dark);
+  font-size:12.5px;line-height:1.45;
+}
+
+/* ---------- FORM ---------- */
+.field{margin-top:12px}
+.field label{display:block;font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:5px}
+.field input{
+  width:100%;min-height:50px;padding:0 14px;
+  font-family:inherit;font-size:15px;color:var(--text);
+  background:#fff;border:1.5px solid var(--border);border-radius:12px;
+  transition:border-color var(--t);
+}
+.field input:focus{outline:none;border-color:var(--accent)}
+
+/* ---------- QR SCANNER ---------- */
+.qr-frame{
+  position:relative;width:200px;height:200px;margin:22px auto;
+  border-radius:18px;background:#0F172A;overflow:hidden;
+  display:grid;place-items:center;font-size:64px;
+}
+.qr-frame::before,.qr-frame::after{
+  content:"";position:absolute;width:38px;height:38px;
+  border:3px solid var(--green);border-radius:8px;
+}
+.qr-frame::before{top:14px;left:14px;border-right:0;border-bottom:0}
+.qr-frame::after{bottom:14px;right:14px;border-left:0;border-top:0}
+.qr-scanline{
+  position:absolute;left:10px;right:10px;height:3px;
+  background:var(--green);border-radius:99px;
+  box-shadow:0 0 14px 2px rgba(22,163,74,.85);
+  animation:scan 1.5s ease-in-out infinite;
+}
+.qr-center{text-align:center;color:var(--muted);font-size:14px;font-weight:700}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes slideUp{from{transform:translateY(24px)}to{transform:translateY(0)}}
+@keyframes scan{0%{top:14%}50%{top:84%}100%{top:14%}}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-inner" id="headerInner"></div>
+</header>
+
+<nav class="tabbar" id="tabbar" aria-label="Навигация / Навигация"></nav>
+
+<main id="app"></main>
+
+<div id="modalRoot"></div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   1. APP_DATA — весь контент на двух языках
+   ============================================================ */
+const APP_DATA = {
+
+  /* ---------------------------- РУССКИЙ ---------------------------- */
+  ru: {
+    ui: {
+      offline: "Offline Ready",
+      langLabel: "Язык интерфейса",
+      tabEmergency: "Экстренная помощь",
+      tabQuiz: "Проверка знаний",
+      tabCourses: "Курсы и школам",
+
+      homeTitle: "Что произошло?",
+      homeSub: "Выберите ситуацию — получите проверенный пошаговый маршрут за 2–3 касания.",
+      homeNote: "Приложение не ставит диагноз. Это проверенное дерево сценариев с указанием версии протокола.",
+      qrBtn: "Сканировать QR с аптечки",
+      qrHint: "Имитация: наклейка на аптечке ведёт сразу к нужному сценарию",
+      qrScanning: "Сканирование QR-кода…",
+      qrResult: "QR распознан: аптечка спортзала №3",
+
+      steps: "шагов",
+      backToList: "К списку ситуаций",
+      back: "Назад",
+      next: "Следующий шаг",
+      finish: "Завершить",
+      step: "Шаг",
+      of: "из",
+      dontTitle: "Чего делать НЕЛЬЗЯ",
+
+      trustTitle: "Проверено специалистом",
+      trustNoAi: "Не ИИ-диагноз",
+      protocol: "Протокол",
+      checked: "Проверено",
+
+      quizTitle: "Проверка знаний",
+      quizSub: "5 ситуационных вопросов с мгновенной проверкой и объяснением.",
+      question: "Вопрос",
+      correct: "Верно!",
+      wrong: "Неверно",
+      correctAnswer: "Правильный ответ:",
+      nextQuestion: "Следующий вопрос",
+      showResult: "Показать результат",
+      result: "Результат",
+      yourScore: "Ваш результат",
+      bestScore: "Лучший результат",
+      retry: "Пройти заново",
+      perfect: "Отлично! Вы готовы действовать правильно.",
+      good: "Хорошо, но стоит повторить материал и пройти тест снова.",
+      low: "Пройдите видеокурс «Основы первой помощи» и попробуйте снова.",
+      quizSaved: "Результат сохранён в localStorage",
+
+      coursesTitle: "Курсы и школам",
+      coursesSub: "Экстренная помощь и SOS всегда бесплатны. Платите только за обучение.",
+      choose: "Оставить заявку",
+      openNow: "Открыть сейчас",
+      formNote: "Экстренный раздел и SOS всегда бесплатны и не требуют заявки.",
+
+      requestTitle: "Заявка на доступ",
+      fName: "Имя",
+      fPhone: "Телефон",
+      fOrg: "Школа / организация",
+      fSubmit: "Отправить заявку",
+      fSuccess: "Заявка отправлена!",
+      fSuccessText: "Методист свяжется с вами в течение рабочего дня. Экстренный раздел уже доступен без заявки.",
+      close: "Закрыть",
+
+      callTitle: "Экстренный вызов",
+      callSub: "Выберите службу — звонок бесплатный с любого телефона.",
+      s112: "Единая служба спасения",
+      s103: "Скорая помощь",
+      memoTitle: "Что сказать диспетчеру",
+      memo: [
+        "Точный адрес и ориентир: подъезд, этаж, код домофона",
+        "Что случилось и сколько человек пострадало",
+        "Возраст и пол пострадавшего, в сознании ли он, дышит ли",
+        "Не кладите трубку — диспетчер задаст вопросы и подскажет действия",
+        "По возможности пошлите кого-то встретить бригаду у входа"
+      ],
+      sosNote: "Пока едет бригада — откройте нужный сценарий в разделе «Экстренная помощь»."
+    },
+
+    scenarios: [
+      {
+        id: "bleeding",
+        icon: "🩸",
+        title: "Кровотечение",
+        trust: { version: "v2.4", date: "12.02.2025", source: "НИЦ первой помощи, Алматы" },
+        steps: [
+          {
+            title: "Остановите кровотечение прямым давлением",
+            text: "Прижмите стерильную салфетку или чистую ткань к ране и давите ладонью не менее 10 минут без перерывов.",
+            dont: "Не поднимайте повязку, чтобы «посмотреть» — это срывает образующийся сгусток."
+          },
+          {
+            title: "Придайте конечности возвышенное положение",
+            text: "Если нет перелома, поднимите повреждённую руку или ногу выше уровня сердца — это снижает приток крови к ране.",
+            dont: "Не накладывайте жгут без крайней необходимости: только при массивном артериальном кровотечении, которое не остановить давлением."
+          },
+          {
+            title: "Вызовите скорую помощь",
+            text: "Звоните 103 или 112, если кровь не останавливается за 10 минут, кровотечение пульсирующее или рана глубокая.",
+            dont: "Не оставляйте пострадавшего одного и не давайте ему пить при сильном кровотечении."
+          },
+          {
+            title: "Следите за состоянием до приезда врача",
+            text: "Проверяйте дыхание и сознание каждые 2 минуты. Если человек побледнел и покрылся холодным потом — уложите его и приподнимите ноги.",
+            dont: "Не снимайте пропитанную кровью повязку — накладывайте новую поверх старой."
+          }
+        ]
+      },
+      {
+        id: "burn",
+        icon: "🔥",
+        title: "Ожог",
+        trust: { version: "v3.1", date: "05.03.2025", source: "НИЦ первой помощи, Алматы" },
+        steps: [
+          {
+            title: "Охлаждайте прохладной водой 15–20 минут",
+            text: "Направьте на ожог струю прохладной (не ледяной) воды на 15–20 минут. Снимите кольца и часы рядом с ожогом до появления отёка.",
+            dont: "Не прикладывайте лёд и не мажьте ожог маслом, кремом или зубной пастой."
+          },
+          {
+            title: "Накройте чистой сухой тканью",
+            text: "Пищевая плёнка или чистая хлопковая ткань защитят ожог от инфекции. Не натягивайте — просто свободно прикройте.",
+            dont: "Не вскрывайте пузыри — это открытые ворота для инфекции."
+          },
+          {
+            title: "Оцените площадь и глубину",
+            text: "Ожог больше ладони пострадавшего, а также ожог лица, кистей, стоп или промежности — повод немедленно звонить 103.",
+            dont: "Не снимайте прилипшую к ожогу одежду — аккуратно разрежьте её вокруг."
+          },
+          {
+            title: "Вызовите скорую и согрейте человека",
+            text: "Пока едет бригада, укройте пострадавшего, чтобы не допустить переохлаждения, и давайте пить воду мелкими глотками.",
+            dont: "Не давайте обезболивающие без указания врача и не оставляйте человека одного."
+          }
+        ]
+      },
+      {
+        id: "unconscious",
+        icon: "😵",
+        title: "Потеря сознания",
+        trust: { version: "v2.7", date: "18.01.2025", source: "НИЦ первой помощи, Алматы" },
+        steps: [
+          {
+            title: "Проверьте реакцию и дыхание",
+            text: "Громко окликните, аккуратно встряхните за плечи. Наклонитесь к лицу и в течение 10 секунд слушайте дыхание.",
+            dont: "Не трясите человека резко и не сажайте его — при травме головы это опасно."
+          },
+          {
+            title: "Поверните на бок — безопасное положение",
+            text: "Если дыхание есть, поверните человека на бок, подтяните нижнюю ногу и слегка запрокиньте голову, чтобы дыхательные пути были свободны.",
+            dont: "Не вкладывайте в рот ложки и пальцы и не вливайте воду."
+          },
+          {
+            title: "Звоните 103 или 112",
+            text: "Сообщите диспетчеру адрес, что человек без сознания, и есть ли дыхание. Не кладите трубку до конца разговора.",
+            dont: "Не оставляйте пострадавшего одного без присмотра, даже если кажется, что он «просто спит»."
+          },
+          {
+            title: "Контролируйте дыхание до приезда",
+            text: "Каждые 2 минуты проверяйте дыхание. Если оно пропало — начинайте сердечно-лёгочную реанимацию: 30 нажатий на грудину и 2 вдоха.",
+            dont: "Не прекращайте реанимацию до приезда бригады или появления признаков жизни."
+          }
+        ]
+      },
+      {
+        id: "choking",
+        icon: "🫁",
+        title: "Подавился (приём Геймлиха)",
+        trust: { version: "v2.2", date: "22.02.2025", source: "НИЦ первой помощи, Алматы" },
+        steps: [
+          {
+            title: "Спросите: «Вы подавились?»",
+            text: "Если человек может говорить и кашлять — попросите кашлять сильнее. Не мешайте: эффективный кашель лучше любых действий.",
+            dont: "Не бейте по спине человека, который кашляет, — кусок может сместиться глубже."
+          },
+          {
+            title: "5 ударов между лопатками",
+            text: "Если кашель не помогает, наклоните человека вперёд и нанесите 5 резких ударов основанием ладони между лопатками.",
+            dont: "Не наносите удары, если человек стоит прямо, — наклон вперёд обязателен."
+          },
+          {
+            title: "Приём Геймлиха — 5 толчков",
+            text: "Встаньте сзади, обхватите человека, положите кулак между пупком и грудиной, накройте второй рукой и сделайте 5 резких толчков внутрь и вверх. Чередуйте с ударами по спине.",
+            dont: "Не выполняйте приём Геймлиха беременным и детям до года — там другие техники."
+          },
+          {
+            title: "Вызовите 103",
+            text: "Если человек потерял сознание — уложите его на пол и начинайте реанимацию. Звоните 103 или 112 немедленно.",
+            dont: "Не оставляйте человека одного после успешного извлечения — нужен осмотр врача."
+          }
+        ]
+      },
+      {
+        id: "fracture",
+        icon: "🦴",
+        title: "Перелом и ушиб",
+        trust: { version: "v1.9", date: "30.01.2025", source: "НИЦ первой помощи, Алматы" },
+        steps: [
+          {
+            title: "Обездвижьте повреждённую часть",
+            text: "Не двигайте конечность. Зафиксируйте её в том положении, в котором нашли, используя шину или подручные средства.",
+            dont: "Не пытайтесь вправить кость или «поставить на место» сустав самостоятельно."
+          },
+          {
+            title: "Приложите холод",
+            text: "Холод через ткань на 15–20 минут уменьшит боль и отёк. Повторяйте каждые 2 часа.",
+            dont: "Не прикладывайте лёд прямо на кожу — только через ткань."
+          },
+          {
+            title: "Проверьте кровообращение",
+            text: "Убедитесь, что пальцы ниже места травмы тёплые и не синеют. Если повязка давит — ослабьте её.",
+            dont: "Не накладывайте тугую повязку при открытом переломе — сначала накройте рану чистой тканью."
+          },
+          {
+            title: "Вызовите скорую при открытом переломе",
+            text: "Открытый перелом, деформация, сильная боль, онемение — звоните 103. До приезда не давайте еду и питьё.",
+            dont: "Не давайте пострадавшему пить, если возможна операция."
+          }
+        ]
+      },
+      {
+        id: "heatstroke",
+        icon: "🌡️",
+        title: "Тепловой удар",
+        trust: { version: "v2.0", date: "08.02.2025", source: "НИЦ первой помощи, Алматы" },
+        steps: [
+          {
+            title: "Перенесите в прохладное место",
+            text: "В тень или в помещение с кондиционером. Снимите лишнюю одежду.",
+            dont: "Не оставляйте человека на солнце и не заставляйте идти самостоятельно."
+          },
+          {
+            title: "Охлаждайте тело",
+            text: "Прохладная вода, влажные полотенца на шею, подмышки и пах, обмахивание. Цель — снизить температуру тела.",
+            dont: "Не используйте лёд и ледяную воду при высокой температуре тела — возможен спазм сосудов."
+          },
+          {
+            title: "Дайте воду, если человек в сознании",
+            text: "Прохладная вода мелкими глотками. Если есть возможность — добавьте щепотку соли и сахара.",
+            dont: "Не давайте пить человеку без сознания или при тошноте."
+          },
+          {
+            title: "Звоните 103 при тревожных признаках",
+            text: "Температура выше 40 °C, спутанность речи, судороги, отсутствие потоотделения — немедленно 103.",
+            dont: "Не давайте жаропонижающие без рекомендации врача."
+          }
+        ]
+      },
+      {
+        id: "poisoning",
+        icon: "☠️",
+        title: "Отравление",
+        trust: { version: "v1.6", date: "14.03.2025", source: "НИЦ первой помощи, Алматы" },
+        steps: [
+          {
+            title: "Прекратите контакт с веществом",
+            text: "Выведите человека на свежий воздух, снимите загрязнённую одежду, промойте кожу и глаза водой в течение 15 минут.",
+            dont: "Не вызывайте рвоту, если человек проглотил кислоту, щёлочь или бензин."
+          },
+          {
+            title: "Соберите информацию",
+            text: "Сохраните упаковку, остатки вещества или растения — это поможет врачу. Запомните время и количество.",
+            dont: "Не пытайтесь «нейтрализовать» вещество содой, молоком или уксусом без указания врача."
+          },
+          {
+            title: "Звоните 103 или 112",
+            text: "Скажите диспетчеру, чем и когда отравился человек, его возраст и вес. Не кладите трубку.",
+            dont: "Не давайте лекарства «на всякий случай» и не поите человека при потере сознания."
+          },
+          {
+            title: "Следите за дыханием",
+            text: "Если человек без сознания, но дышит — поверните его на бок. Если дыхания нет — начинайте реанимацию.",
+            dont: "Не оставляйте пострадавшего одного до приезда скорой."
+          }
+        ]
+      },
+      {
+        id: "seizure",
+        icon: "⚡",
+        title: "Судорожный приступ",
+        trust: { version: "v2.1", date: "02.03.2025", source: "НИЦ первой помощи, Алматы" },
+        steps: [
+          {
+            title: "Уберите опасные предметы",
+            text: "Отодвиньте мебель и острые предметы, подложите под голову что-то мягкое. Засеките время начала приступа.",
+            dont: "Не удерживайте человека силой и не пытайтесь разжать ему зубы."
+          },
+          {
+            title: "Не вкладывайте ничего в рот",
+            text: "Человек не может проглотить язык. Ничего не кладите в рот — это опасно и для вас, и для него.",
+            dont: "Не вливайте воду и лекарства во время приступа."
+          },
+          {
+            title: "После приступа — на бок",
+            text: "Когда судороги закончились, поверните человека на бок и проверьте дыхание. Оставайтесь рядом.",
+            dont: "Не заставляйте человека вставать сразу — он дезориентирован."
+          },
+          {
+            title: "Звоните 103, если приступ дольше 5 минут",
+            text: "Также звоните, если приступ повторный, случился в воде или это первый приступ в жизни.",
+            dont: "Не оставляйте человека одного после приступа."
+          }
+        ]
+      }
+    ],
+
+    quiz: [
+      {
+        q: "Человек подавился, но может кашлять и говорить. Что делать в первую очередь?",
+        options: [
+          "Сразу выполнить приём Геймлиха",
+          "Попросить кашлять сильнее и наблюдать",
+          "Дать ему стакан воды",
+          "Уложить на спину"
+        ],
+        correct: 1,
+        explain: "Эффективный кашель — лучший способ освободить дыхательные пути. Вмешиваться нужно только если кашель слабеет или человек не может дышать."
+      },
+      {
+        q: "Сколько минут нужно охлаждать ожог прохладной водой?",
+        options: [
+          "1–2 минуты",
+          "15–20 минут",
+          "Охлаждать не нужно",
+          "Ровно 60 минут"
+        ],
+        correct: 1,
+        explain: "Охлаждение прохладной водой 15–20 минут снижает глубину повреждения и боль. Лёд и ледяная вода не используются."
+      },
+      {
+        q: "Человек без сознания, но дышит. Ваше действие после проверки дыхания?",
+        options: [
+          "Дать воды",
+          "Повернуть на бок в безопасное положение",
+          "Посадить и похлопать по щекам",
+          "Оставить и ждать, пока очнётся"
+        ],
+        correct: 1,
+        explain: "Безопасное положение на боку предотвращает западение языка и попадание рвотных масс в дыхательные пути."
+      },
+      {
+        q: "При каком состоянии накладывают кровоостанавливающий жгут?",
+        options: [
+          "При любом кровотечении",
+          "При массивном артериальном кровотечении, которое не остановить давлением",
+          "При обычной ссадине",
+          "При носовом кровотечении"
+        ],
+        correct: 1,
+        explain: "Жгут — крайняя мера. Он опасен и применяется только тогда, когда прямое давление не помогает."
+      },
+      {
+        q: "Что категорически НЕЛЬЗЯ делать при судорожном приступе?",
+        options: [
+          "Убирать опасные предметы вокруг",
+          "Вкладывать предметы в рот",
+          "Засекать время начала приступа",
+          "Повернуть на бок после приступа"
+        ],
+        correct: 1,
+        explain: "Человек не может проглотить язык. Предметы во рту ломают зубы и травмируют полость рта."
+      }
+    ],
+
+    courses: [
+      {
+        id: "free",
+        free: true,
+        title: "Памятки / SOS / Офлайн-доступ",
+        price: "0 ₸",
+        badge: "Бесплатно навсегда",
+        features: [
+          "Все 8 сценариев первой помощи",
+          "Кнопка SOS 112 / 103 без ограничений",
+          "Работа без интернета (PWA)",
+          "Trust Badge с версией протокола"
+        ]
+      },
+      {
+        id: "video",
+        free: false,
+        highlight: true,
+        title: "Видеокурс «Основы первой помощи»",
+        price: "2 490 ₸",
+        badge: "Хит",
+        features: [
+          "12 коротких видео по 4–6 минут",
+          "5 интерактивных тестов",
+          "Сертификат по итогам курса",
+          "Доступ на 12 месяцев"
+        ]
+      },
+      {
+        id: "practice",
+        free: false,
+        title: "Тематический практикум",
+        price: "4 990 ₸",
+        badge: "",
+        features: [
+          "Углублённый разбор 8 сценариев",
+          "Отработка действий с инструктором онлайн",
+          "Печатные чек-листы для аптечки",
+          "Разбор ошибок в личном кабинете"
+        ]
+      },
+      {
+        id: "school",
+        free: false,
+        title: "Учебная группа (Школы / Спорт)",
+        price: "19 900 ₸",
+        badge: "B2B",
+        features: [
+          "Доступ для класса или команды до 30 человек",
+          "QR-пакет для наклейки на аптечки",
+          "Отчётность для администрации школы",
+          "Ежегодное обновление протоколов"
+        ]
+      }
+    ]
+  },
+
+  /* ---------------------------- ҚАЗАҚША ---------------------------- */
+  kz: {
+    ui: {
+      offline: "Офлайн дайын",
+      langLabel: "Интерфейс тілі",
+      tabEmergency: "Жедел көмек",
+      tabQuiz: "Білімді тексеру",
+      tabCourses: "Курстар және мектептер",
+
+      homeTitle: "Не болды?",
+      homeSub: "Жағдайды таңдаңыз — 2–3 түрту арқылы тексерілген қадамдық нұсқаулық аласыз.",
+      homeNote: "Қолданба диагноз қоймайды. Бұл хаттама нұсқасы көрсетілген тексерілген сценарийлер ағашы.",
+      qrBtn: "Дәрі қобдишасындағы QR-ды сканерлеу",
+      qrHint: "Имитация: қобдишадағы жапсырма қажетті сценарийге бірден апарады",
+      qrScanning: "QR-код сканерленуде…",
+      qrResult: "QR танылды: №3 спорт залының дәрі қобдишасы",
+
+      steps: "қадам",
+      backToList: "Жағдайлар тізіміне",
+      back: "Артқа",
+      next: "Келесі қадам",
+      finish: "Аяқтау",
+      step: "Қадам",
+      of: "/",
+      dontTitle: "НЕ ІСТЕУ КЕРЕК ЕМЕС",
+
+      trustTitle: "Маман тексерген",
+      trustNoAi: "ЖИ-диагноз емес",
+      protocol: "Хаттама",
+      checked: "Тексерілген",
+
+      quizTitle: "Білімді тексеру",
+      quizSub: "5 жағдайлық сұрақ, бірден тексеру және түсіндіру.",
+      question: "Сұрақ",
+      correct: "Дұрыс!",
+      wrong: "Қате",
+      correctAnswer: "Дұрыс жауап:",
+      nextQuestion: "Келесі сұрақ",
+      showResult: "Нәтижені көрсету",
+      result: "Нәтиже",
+      yourScore: "Сіздің нәтижеңіз",
+      bestScore: "Үздік нәтиже",
+      retry: "Қайта өту",
+      perfect: "Керемет! Сіз дұрыс әрекет етуге дайынсыз.",
+      good: "Жақсы, бірақ материалды қайталап, тестті қайта тапсырған жөн.",
+      low: "«Алғашқы көмек негіздері» бейнекурсын өтіп, қайта көріңіз.",
+      quizSaved: "Нәтиже localStorage ішінде сақталды",
+
+      coursesTitle: "Курстар және мектептер",
+      coursesSub: "Жедел көмек пен SOS әрқашан тегін. Тек оқыту үшін төлейсіз.",
+      choose: "Өтінім қалдыру",
+      openNow: "Қазір ашу",
+      formNote: "Жедел бөлім мен SOS әрқашан тегін және өтінімсіз.",
+
+      requestTitle: "Қолжетімділікке өтінім",
+      fName: "Атыңыз",
+      fPhone: "Телефон",
+      fOrg: "Мектеп / ұйым",
+      fSubmit: "Өтінім жіберу",
+      fSuccess: "Өтінім жіберілді!",
+      fSuccessText: "Әдіскер жұмыс күні ішінде хабарласады. Жедел бөлім өтінімсіз қолжетімді.",
+      close: "Жабу",
+
+      callTitle: "Жедел шақыру",
+      callSub: "Қызметті таңдаңыз — қоңырау кез келген телефоннан тегін.",
+      s112: "Бірыңғай құтқару қызметі",
+      s103: "Жедел жәрдем",
+      memoTitle: "Диспетчерге не айту керек",
+      memo: [
+        "Нақты мекенжай мен бағдар: подъезд, қабат, домофон коды",
+        "Не болғаны және қанша адам зардап шеккені",
+        "Зардап шегушінің жасы мен жынысы, есінде ме, тынысы бар ма",
+        "Тұтқаны қоймаңыз — диспетчер сұрақ қойып, әрекеттерді айтады",
+        "Мүмкіндік болса, біреуді бригаданы кіреберісте қарсы алуға жіберіңіз"
+      ],
+      sosNote: "Бригада келгенше «Жедел көмек» бөліміндегі қажетті сценарийді ашыңыз."
+    },
+
+    scenarios: [
+      {
+        id: "bleeding",
+        icon: "🩸",
+        title: "Қан кету",
+        trust: { version: "v2.4", date: "12.02.2025", source: "Алғашқы көмек ҒЗО, Алматы" },
+        steps: [
+          {
+            title: "Қан кетуді тікелей басу арқылы тоқтатыңыз",
+            text: "Стерильді майлықты немесе таза матаны жараға басып, алақанмен кемінде 10 минут үзіліссіз басыңыз.",
+            dont: "«Қарау» үшін таңғышты көтермеңіз — бұл пайда болған ұйыған қанды бұзады."
+          },
+          {
+            title: "Жарақаттанған аяқ-қолды жоғары көтеріңіз",
+            text: "Сынық болмаса, зақымдалған қолды немесе аяқты жүрек деңгейінен жоғары көтеріңіз — бұл жараға қан ағынын азайтады.",
+            dont: "Жгутты шектен тыс пайдаланбаңыз: тек басумен тоқтамайтын қатты артериялық қан кетуде ғана."
+          },
+          {
+            title: "Жедел жәрдем шақырыңыз",
+            text: "Қан 10 минутта тоқтамаса, қан пульстеніп ақса немесе жара терең болса, 103 немесе 112-ге қоңырау шалыңыз.",
+            dont: "Қатты қан кету кезінде зардап шегушіні жалғыз қалдырмаңыз және оған су бермеңіз."
+          },
+          {
+            title: "Дәрігер келгенше жағдайын бақылаңыз",
+            text: "Әр 2 минут сайын тынысы мен есін тексеріңіз. Адам бозарып, суық тер басса — жатқызып, аяғын көтеріңіз.",
+            dont: "Қанға малынған таңғышты шешпеңіз — үстінен жаңасын салыңыз."
+          }
+        ]
+      },
+      {
+        id: "burn",
+        icon: "🔥",
+        title: "Күйік",
+        trust: { version: "v3.1", date: "05.03.2025", source: "Алғашқы көмек ҒЗО, Алматы" },
+        steps: [
+          {
+            title: "Салқын сумен 15–20 минут суытыңыз",
+            text: "Күйікке салқын (мұздай емес) су ағынын 15–20 минут ұстаңыз. Ісіну басталмай тұрып, жақын жердегі сақина мен сағатты шешіңіз.",
+            dont: "Мұз қолданбаңыз және күйікті май, крем немесе тіс пастасымен майламаңыз."
+          },
+          {
+            title: "Таза құрғақ матамен жабыңыз",
+            text: "Тағамдық пленка немесе таза мақта мата күйікті инфекциядан қорғайды. Тартпаңыз — жай ғана жабыңыз.",
+            dont: "Күлдіршіктерді (көпіршіктерді) жармаңыз — бұл инфекцияға жол ашады."
+          },
+          {
+            title: "Аумағы мен тереңдігін бағалаңыз",
+            text: "Зардап шегушінің алақанынан үлкен күйік, сондай-ақ бет, қол, табан немесе шап аймағының күйігі — дереу 103-ке қоңырау шалуға себеп.",
+            dont: "Күйікке жабысқан киімді шешпеңіз — айналасынан абайлап кесіңіз."
+          },
+          {
+            title: "Жедел жәрдем шақырып, адамды жылытыңыз",
+            text: "Бригада келгенше зардап шегушіні жауып, денесі суымауын қадағалаңыз және суды ұсақ жұтыммен ішкізіңіз.",
+            dont: "Дәрігер нұсқауынсыз ауырсынуды басатын дәрі бермеңіз және адамды жалғыз қалдырмаңыз."
+          }
+        ]
+      },
+      {
+        id: "unconscious",
+        icon: "😵",
+        title: "Есін жоғалту",
+        trust: { version: "v2.7", date: "18.01.2025", source: "Алғашқы көмек ҒЗО, Алматы" },
+        steps: [
+          {
+            title: "Реакциясы мен тынысын тексеріңіз",
+            text: "Қатты дауыстап шақырыңыз, иығынан абайлап сілкіңіз. Бетіне жақындап, 10 секунд бойы тынысын тыңдаңыз.",
+            dont: "Адамды қатты сілкімеңіз және отырғызбаңыз — бас жарақаты кезінде бұл қауіпті."
+          },
+          {
+            title: "Бүйіріне бұрыңыз — қауіпсіз қалып",
+            text: "Тынысы болса, адамды бүйіріне бұрып, астыңғы аяғын бүгіңіз және басын сәл артқа шалқайтып, тыныс жолдарын босатыңыз.",
+            dont: "Аузына қасық, саусақ салмаңыз және су құймаңыз."
+          },
+          {
+            title: "103 немесе 112-ге қоңырау шалыңыз",
+            text: "Диспетчерге мекенжайды, адамның есі жоқ екенін және тынысы бар-жоғын айтыңыз. Сөйлесу аяқталғанша тұтқаны қоймаңыз.",
+            dont: "«Жай ғана ұйықтап жатыр» деп ойласаңыз да, зардап шегушіні жалғыз қалдырмаңыз."
+          },
+          {
+            title: "Жедел жәрдем келгенше тынысын бақылаңыз",
+            text: "Әр 2 минут сайын тынысын тексеріңіз. Тынысы тоқтаса — жүрек-өкпе реанимациясын бастаңыз: кеудеге 30 басу және 2 дем беру.",
+            dont: "Бригада келгенше немесе өмір белгілері пайда болғанша реанимацияны тоқтатпаңыз."
+          }
+        ]
+      },
+      {
+        id: "choking",
+        icon: "🫁",
+        title: "Тұншығу (Геймлих тәсілі)",
+        trust: { version: "v2.2", date: "22.02.2025", source: "Алғашқы көмек ҒЗО, Алматы" },
+        steps: [
+          {
+            title: "«Тұншығып қалдыңыз ба?» деп сұраңыз",
+            text: "Адам сөйлеп, жөтеле алса — қаттырақ жөтелуін сұраңыз. Кедергі жасамаңыз: тиімді жөтел кез келген әрекеттен жақсы.",
+            dont: "Жөтеліп жатқан адамның арқасына ұрмаңыз — кесек тереңірек кетуі мүмкін."
+          },
+          {
+            title: "Жауырын арасына 5 соққы",
+            text: "Жөтел көмектеспесе, адамды алға еңкейтіп, алақан түбімен жауырын арасына 5 рет қатты соғыңыз.",
+            dont: "Адам тік тұрса соққы жасамаңыз — алға еңкейту міндетті."
+          },
+          {
+            title: "Геймлих тәсілі — 5 итеру",
+            text: "Артына тұрып, адамды құшақтаңыз, жұдырықты кіндік пен төс сүйегінің арасына қойып, екінші қолмен жауып, ішке және жоғары қарай 5 рет қатты итеріңіз. Арқаға соққымен кезектестіріңіз.",
+            dont: "Жүкті әйелдер мен бір жасқа дейінгі балаларға Геймлих тәсілін қолданбаңыз — басқа техникалар бар."
+          },
+          {
+            title: "103-ке қоңырау шалыңыз",
+            text: "Адам есінен танып қалса — еденге жатқызып, реанимацияны бастаңыз. 103 немесе 112-ге дереу қоңырау шалыңыз.",
+            dont: "Кесек шыққаннан кейін де адамды жалғыз қалдырмаңыз — дәрігер тексеруі қажет."
+          }
+        ]
+      },
+      {
+        id: "fracture",
+        icon: "🦴",
+        title: "Сынық және соғылу",
+        trust: { version: "v1.9", date: "30.01.2025", source: "Алғашқы көмек ҒЗО, Алматы" },
+        steps: [
+          {
+            title: "Зақымдалған бөлікті қозғалтпаңыз",
+            text: "Аяқ-қолды қозғамаңыз. Оны тапқан қалпында шина немесе қолда бар заттармен бекітіңіз.",
+            dont: "Сүйекті өз бетіңізше орнына салуға немесе буынды «қалпына келтіруге» тырыспаңыз."
+          },
+          {
+            title: "Суық қолданыңыз",
+            text: "Мата арқылы 15–20 минут суық қою ауырсыну мен ісінуді азайтады. Әр 2 сағат сайын қайталаңыз.",
+            dont: "Мұзды теріге тікелей қоймаңыз — тек мата арқылы."
+          },
+          {
+            title: "Қан айналымын тексеріңіз",
+            text: "Жарақаттан төмен орналасқан саусақтар жылы және көгермегеніне көз жеткізіңіз. Таңғыш қысса — босаңсытыңыз.",
+            dont: "Ашық сынық кезінде қатты таңғыш салмаңыз — алдымен жараны таза матамен жабыңыз."
+          },
+          {
+            title: "Ашық сынық кезінде жедел жәрдем шақырыңыз",
+            text: "Ашық сынық, пішіннің өзгеруі, қатты ауырсыну, ұю — 103-ке қоңырау шалыңыз. Келгенше тамақ пен су бермеңіз.",
+            dont: "Операция қажет болуы мүмкін болса, зардап шегушіге су бермеңіз."
+          }
+        ]
+      },
+      {
+        id: "heatstroke",
+        icon: "🌡️",
+        title: "Ыстық соққы",
+        trust: { version: "v2.0", date: "08.02.2025", source: "Алғашқы көмек ҒЗО, Алматы" },
+        steps: [
+          {
+            title: "Салқын жерге көшіріңіз",
+            text: "Көлеңкеге немесе кондиционері бар бөлмеге апарыңыз. Артық киімді шешіңіз.",
+            dont: "Адамды күн астында қалдырмаңыз және өз бетімен жүруге мәжбүрлемеңіз."
+          },
+          {
+            title: "Денесін суытыңыз",
+            text: "Салқын су, мойынға, қолтық астына және шапқа дымқыл сүлгі, желпу. Мақсат — дене қызуын төмендету.",
+            dont: "Дене қызуы жоғары кезде мұз бен мұздай су қолданбаңыз — тамырлар тарылуы мүмкін."
+          },
+          {
+            title: "Есі бар болса су беріңіз",
+            text: "Салқын суды ұсақ жұтыммен ішкізіңіз. Мүмкіндік болса, бір щиптым тұз бен қант қосыңыз.",
+            dont: "Есі жоқ немесе лоқсып жатқан адамға су бермеңіз."
+          },
+          {
+            title: "Қауіпті белгілерде 103-ке қоңырау шалыңыз",
+            text: "40 °C-тан жоғары қызу, сөйлеудің шатасуы, құрысу, тер шықпауы — дереу 103.",
+            dont: "Дәрігер ұсынысынсыз қызуды түсіретін дәрі бермеңіз."
+          }
+        ]
+      },
+      {
+        id: "poisoning",
+        icon: "☠️",
+        title: "Улану",
+        trust: { version: "v1.6", date: "14.03.2025", source: "Алғашқы көмек ҒЗО, Алматы" },
+        steps: [
+          {
+            title: "Затпен байланысты тоқтатыңыз",
+            text: "Адамды таза ауаға шығарыңыз, ластанған киімді шешіңіз, тері мен көзді 15 минут сумен жуыңыз.",
+            dont: "Адам қышқыл, сілті немесе бензин жұтса, құстырмаңыз."
+          },
+          {
+            title: "Ақпарат жинаңыз",
+            text: "Қаптаманы, заттың қалдығын немесе өсімдікті сақтаңыз — бұл дәрігерге көмектеседі. Уақыты мен мөлшерін есте сақтаңыз.",
+            dont: "Дәрігер нұсқауынсыз затты сода, сүт немесе сірке суымен «бейтараптауға» тырыспаңыз."
+          },
+          {
+            title: "103 немесе 112-ге қоңырау шалыңыз",
+            text: "Диспетчерге адамның немен және қашан уланғанын, жасы мен салмағын айтыңыз. Тұтқаны қоймаңыз.",
+            dont: "«Алдын ала» дәрі бермеңіз және есі жоқ адамға су ішкізбеңіз."
+          },
+          {
+            title: "Тынысын бақылаңыз",
+            text: "Адам есі жоқ, бірақ тынысы болса — бүйіріне бұрыңыз. Тынысы жоқ болса — реанимацияны бастаңыз.",
+            dont: "Жедел жәрдем келгенше зардап шегушіні жалғыз қалдырмаңыз."
+          }
+        ]
+      },
+      {
+        id: "seizure",
+        icon: "⚡",
+        title: "Құрысу ұстамасы",
+        trust: { version: "v2.1", date: "02.03.2025", source: "Алғашқы көмек ҒЗО, Алматы" },
+        steps: [
+          {
+            title: "Қауіпті заттарды алыңыз",
+            text: "Жиһаз бен өткір заттарды жылжытыңыз, басының астына жұмсақ нәрсе қойыңыз. Ұстама басталған уақытты белгілеңіз.",
+            dont: "Адамды күшпен ұстамаңыз және тісін ашуға тырыспаңыз."
+          },
+          {
+            title: "Аузына ештеңе салмаңыз",
+            text: "Адам тілін жұта алмайды. Аузына ештеңе салмаңыз — бұл сізге де, оған да қауіпті.",
+            dont: "Ұстама кезінде су мен дәрі құймаңыз."
+          },
+          {
+            title: "Ұстамадан кейін — бүйіріне",
+            text: "Құрысу аяқталған соң адамды бүйіріне бұрып, тынысын тексеріңіз. Қасында болыңыз.",
+            dont: "Адамды дереу тұрғызбаңыз — ол бағдарсыз күйде болады."
+          },
+          {
+            title: "Ұстама 5 минуттан асса, 103-ке қоңырау шалыңыз",
+            text: "Сондай-ақ ұстама қайталанса, суда болса немесе өмірінде бірінші рет болса — қоңырау шалыңыз.",
+            dont: "Ұстамадан кейін адамды жалғыз қалдырмаңыз."
+          }
+        ]
+      }
+    ],
+
+    quiz: [
+      {
+        q: "Адам тұншығып қалды, бірақ жөтеліп, сөйлей алады. Бірінші кезекте не істеу керек?",
+        options: [
+          "Дереу Геймлих тәсілін қолдану",
+          "Қаттырақ жөтелуін сұрап, бақылау",
+          "Оған бір стақан су беру",
+          "Арқасына жатқызу"
+        ],
+        correct: 1,
+        explain: "Тиімді жөтел — тыныс жолдарын босатудың ең жақсы жолы. Жөтел әлсірегенде немесе адам тыныс ала алмағанда ғана араласу керек."
+      },
+      {
+        q: "Күйікті салқын сумен қанша минут суыту керек?",
+        options: [
+          "1–2 минут",
+          "15–20 минут",
+          "Суыту қажет емес",
+          "Дәл 60 минут"
+        ],
+        correct: 1,
+        explain: "Салқын сумен 15–20 минут суыту зақымдану тереңдігі мен ауырсынуды азайтады. Мұз бен мұздай су қолданылмайды."
+      },
+      {
+        q: "Адам есі жоқ, бірақ тынысы бар. Тынысын тексергеннен кейінгі әрекетіңіз?",
+        options: [
+          "Су беру",
+          "Қауіпсіз қалыпта бүйіріне бұру",
+          "Отырғызып, бетінен шапалақтау",
+          "Қалдырып, өзіне келуін күту"
+        ],
+        correct: 1,
+        explain: "Бүйірдегі қауіпсіз қалып тілдің кетуін және құсықтың тыныс жолдарына түсуін болдырмайды."
+      },
+      {
+        q: "Қан тоқтататын жгут қандай жағдайда салынады?",
+        options: [
+          "Кез келген қан кетуде",
+          "Басумен тоқтамайтын массивті артериялық қан кетуде",
+          "Қарапайым сыдырылған жарада",
+          "Мұрын қан кетуінде"
+        ],
+        correct: 1,
+        explain: "Жгут — соңғы шара. Ол қауіпті және тікелей басу көмектеспегенде ғана қолданылады."
+      },
+      {
+        q: "Құрысу ұстамасы кезінде НЕ ІСТЕУГЕ БОЛМАЙДЫ?",
+        options: [
+          "Айналадағы қауіпті заттарды алып тастау",
+          "Аузына зат салу",
+          "Ұстама басталған уақытты белгілеу",
+          "Ұстамадан кейін бүйіріне бұру"
+        ],
+        correct: 1,
+        explain: "Адам тілін жұта алмайды. Ауызға салынған заттар тісті сындырып, ауыз қуысын жарақаттайды."
+      }
+    ],
+
+    courses: [
+      {
+        id: "free",
+        free: true,
+        title: "Жаднамалар / SOS / Офлайн қолжетімділік",
+        price: "0 ₸",
+        badge: "Мәңгі тегін",
+        features: [
+          "Барлық 8 алғашқы көмек сценарийі",
+          "SOS 112 / 103 түймесі шектеусіз",
+          "Интернетсіз жұмыс (PWA)",
+          "Хаттама нұсқасы бар Trust Badge"
+        ]
+      },
+      {
+        id: "video",
+        free: false,
+        highlight: true,
+        title: "«Алғашқы көмек негіздері» бейнекурсы",
+        price: "2 490 ₸",
+        badge: "Хит",
+        features: [
+          "4–6 минуттық 12 қысқа бейне",
+          "5 интерактивті тест",
+          "Курс қорытындысы бойынша сертификат",
+          "12 айға қолжетімділік"
+        ]
+      },
+      {
+        id: "practice",
+        free: false,
+        title: "Тақырыптық практикум",
+        price: "4 990 ₸",
+        badge: "",
+        features: [
+          "8 сценарийді тереңдетіп талдау",
+          "Нұсқаушымен онлайн жаттығу",
+          "Дәрі қобдишасына арналған басып шығарылатын чек-парақтар",
+          "Жеке кабинетте қателерді талдау"
+        ]
+      },
+      {
+        id: "school",
+        free: false,
+        title: "Оқу тобы (Мектептер / Спорт)",
+        price: "19 900 ₸",
+        badge: "B2B",
+        features: [
+          "30 адамға дейінгі сынып немесе командаға қолжетімділік",
+          "Дәрі қобдишаларына жапсыруға арналған QR-пакет",
+          "Мектеп әкімшілігіне есептілік",
+          "Хаттамаларды жыл сайын жаңарту"
+        ]
+      }
+    ]
+  }
+};
+
+/* ============================================================
+   2. STATE + STORAGE
+   ============================================================ */
+const STORAGE_KEY = "firstaid_kz_v1";
+
+const state = {
+  lang: "ru",
+  tab: "emergency",
+  scenarioId: null,
+  step: 0,
+  quizIndex: 0,
+  quizScore: 0,
+  quizAnswered: false,
+  quizSelected: null,
+  quizFinished: false,
+  modal: null
+};
+
+let qrTimer = null;
+
+const store = {
+  read() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch (e) {
+      return {};
+    }
+  },
+  write(patch) {
+    try {
+      const data = Object.assign(this.read(), patch);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      /* localStorage может быть недоступен */
+    }
+  }
+};
+
+const T = () => APP_DATA[state.lang];
+const $ = (sel, root) => (root || document).querySelector(sel);
+
+/* ============================================================
+   3. RENDER: HEADER / TABS
+   ============================================================ */
+function renderHeader() {
+  const t = T();
+  $("#headerInner").innerHTML = `
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">+</div>
+      <div class="brand-col">
+        <span class="brand-name">FirstAid KZ</span>
+        <span class="offline">${t.ui.offline}</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="lang" role="group" aria-label="${t.ui.langLabel}">
+        <button type="button" data-action="lang" data-lang="ru"
+          class="${state.lang === "ru" ? "active" : ""}"
+          aria-pressed="${state.lang === "ru"}">RU</button>
+        <button type="button" data-action="lang" data-lang="kz"
+          class="${state.lang === "kz" ? "active" : ""}"
+          aria-pressed="${state.lang === "kz"}">KZ</button>
+      </div>
+      <button type="button" class="sos-btn" data-action="sos">SOS 112 / 103</button>
+    </div>
+  `;
+}
+
+function renderTabs() {
+  const t = T();
+  const tabs = [
+    { id: "emergency", ico: "🚑", label: t.ui.tabEmergency },
+    { id: "quiz", ico: "🎓", label: t.ui.tabQuiz },
+    { id: "courses", ico: "📚", label: t.ui.tabCourses }
+  ];
+  $("#tabbar").innerHTML = tabs.map(tb => `
+    <button type="button" class="tab ${state.tab === tb.id ? "active" : ""}"
+      data-action="tab" data-tab="${tb.id}"
+      aria-current="${state.tab === tb.id ? "page" : "false"}">
+      <span class="tab-ico" aria-hidden="true">${tb.ico}</span>
+      <span>${tb.label}</span>
+    </button>
+  `).join("");
+}
+
+/* ============================================================
+   4. RENDER: MAIN VIEWS
+   ============================================================ */
+function renderMain() {
+  const app = $("#app");
+  if (state.tab === "emergency") {
+    app.innerHTML = state.scenarioId ? scenarioPlayerHTML() : scenariosHTML();
+  } else if (state.tab === "quiz") {
+    app.innerHTML = quizHTML();
+  } else {
+    app.innerHTML = coursesHTML();
+  }
+}
+
+/* ---------- Список сценариев ---------- */
+function scenariosHTML() {
+  const t = T();
+  return `
+    <section class="hero">
+      <h1 class="page-title">${t.ui.homeTitle}</h1>
+      <p class="page-sub">${t.ui.homeSub}</p>
+
+      <button type="button" class="qr-btn" data-action="qr">
+        <span class="qr-ico" aria-hidden="true">▣</span>
+        <span class="qr-txt">
+          <strong>${t.ui.qrBtn}</strong>
+          <small>${t.ui.qrHint}</small>
+        </span>
+      </button>
+
+      <div class="note"><span aria-hidden="true">🛡️</span><span>${t.ui.homeNote}</span></div>
+    </section>
+
+    <div class="scenario-grid">
+      ${t.scenarios.map(s => `
+        <button type="button" class="scenario-card" data-action="open-scenario" data-id="${s.id}">
+          <span class="sc-ico" aria-hidden="true">${s.icon}</span>
+          <span class="sc-title">${s.title}</span>
+          <span class="sc-meta">${s.steps.length} ${t.ui.steps}</span>
+        </button>
+      `).join("")}
+    </div>
+  `;
+}
+
+/* ---------- Пошаговый плеер ---------- */
+function scenarioPlayerHTML() {
+  const t = T();
+  const sc = t.scenarios.find(s => s.id === state.scenarioId);
+  if (!sc) return scenariosHTML();
+
+  const total = sc.steps.length;
+  const step = sc.steps[state.step];
+  const isLast = state.step === total - 1;
+  const pct = Math.round(((state.step + 1) / total) * 100);
+
+  return `
+    <section class="player">
+      <button type="button" class="link-btn" data-action="exit-scenario">← ${t.ui.backToList}</button>
+
+      <div class="player-head">
+        <div class="player-icon" aria-hidden="true">${sc.icon}</div>
+        <div>
+          <h1 class="player-title">${sc.title}</h1>
+          <div class="player-meta">${t.ui.step} ${state.step + 1} ${t.ui.of} ${total}</div>
+        </div>
+      </div>
+
+      <div class="progress" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-fill" style="width:${pct}%"></div>
+      </div>
+
+      <article class="step-card">
+        <div class="step-num">${t.ui.step} ${state.step + 1}</div>
+        <h2>${step.title}</h2>
+        <p>${step.text}</p>
+        <div class="dont">
+          <div class="dont-head"><span aria-hidden="true">✕</span> ${t.ui.dontTitle}</div>
+          <p>${step.dont}</p>
+        </div>
+      </article>
+
+      <div class="player-nav">
+        <button type="button" class="btn btn-secondary" data-action="prev" ${state.step === 0 ? "disabled" : ""}>
+          ${t.ui.back}
+        </button>
+        <button type="button" class="btn btn-primary" data-action="next">
+          ${isLast ? t.ui.finish : t.ui.next}
+        </button>
+      </div>
+
+      <div class="trust">
+        <div class="trust-row">
+          <span class="trust-check" aria-hidden="true">✓</span>
+          <span>${t.ui.trustTitle}</span>
+          <span class="trust-pill">${t.ui.trustNoAi}</span>
+        </div>
+        <div class="trust-meta">
+          ${t.ui.protocol} ${sc.trust.version} · ${t.ui.checked} ${sc.trust.date} · ${sc.trust.source}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+/* ---------- Квиз ---------- */
+function quizHTML() {
+  const t = T();
+  if (state.quizFinished) return quizResultHTML();
+
+  const q = t.quiz[state.quizIndex];
+  const total = t.quiz.length;
+  const letters = ["A", "B", "C", "D"];
+  const isLast = state.quizIndex === total - 1;
+
+  const options = q.options.map((opt, i) => {
+    let cls = "quiz-option";
+    if (state.quizAnswered) {
+      if (i === q.correct) cls += " is-correct";
+      else if (i === state.quizSelected) cls += " is-wrong";
+      else cls += " is-dim";
+    }
+    return `
+      <button type="button" class="${cls}" data-action="quiz-answer" data-index="${i}"
+        ${state.quizAnswered ? "disabled" : ""}>
+        <span class="opt-letter">${letters[i]}</span>
+        <span>${opt}</span>
+      </button>
+    `;
+  }).join("");
+
+  const isRight = state.quizSelected === q.correct;
+
+  const explain = state.quizAnswered ? `
+    <div class="explain ${isRight ? "ok" : "bad"}">
+      <strong>${isRight ? "✓ " + t.ui.correct : "✕ " + t.ui.wrong}</strong>
+      ${isRight ? "" : `${t.ui.correctAnswer} <b>${q.options[q.correct]}</b><br><br>`}
+      ${q.explain}
+    </div>
+    <button type="button" class="btn btn-primary" style="width:100%;margin-top:14px" data-action="quiz-next">
+      ${isLast ? t.ui.showResult : t.ui.nextQuestion}
+    </button>
+  ` : "";
+
+  return `
+    <section class="quiz-wrap">
+      <h1 class="page-title">${t.ui.quizTitle}</h1>
+      <p class="page-sub">${t.ui.quizSub}</p>
+
+      <div class="quiz-top">
+        <span class="quiz-count">${t.ui.question} ${state.quizIndex + 1} / ${total}</span>
+        <span class="quiz-score">${state.quizScore} / ${total}</span>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-q">${q.q}</div>
+        <div class="quiz-options">${options}</div>
+        ${explain}
+      </div>
+    </section>
+  `;
+}
+
+function quizResultHTML() {
+  const t = T();
+  const total = t.quiz.length;
+  const score = state.quizScore;
+  const best = store.read().quizBest || 0;
+  const msg = score === total ? t.ui.perfect : (score >= Math.ceil(total * 0.6) ? t.ui.good : t.ui.low);
+
+  return `
+    <section class="quiz-wrap">
+      <h1 class="page-title">${t.ui.result}</h1>
+      <div class="result" style="margin-top:16px">
+        <div class="result-label">${t.ui.yourScore}</div>
+        <div class="result-score">${score} / ${total}</div>
+        <p class="result-msg">${msg}</p>
+        <p class="result-best">${t.ui.bestScore}: <b>${best} / ${total}</b> · ${t.ui.quizSaved}</p>
+        <button type="button" class="btn btn-primary" style="width:100%" data-action="quiz-retry">
+          ${t.ui.retry}
+        </button>
+      </div>
+    </section>
+  `;
+}
+
+/* ---------- Курсы ---------- */
+function coursesHTML() {
+  const t = T();
+  return `
+    <section>
+      <h1 class="page-title">${t.ui.coursesTitle}</h1>
+      <p class="page-sub">${t.ui.coursesSub}</p>
+
+      <div class="course-grid">
+        ${t.courses.map(c => `
+          <article class="course-card ${c.highlight ? "is-highlight" : ""}">
+            <h2>${c.title}</h2>
+            ${c.badge ? `<span class="course-badge">${c.badge}</span>` : ""}
+            <div class="course-price">${c.price}</div>
+            <ul class="course-features">
+              ${c.features.map(f => `<li>${f}</li>`).join("")}
+            </ul>
+            ${c.free
+              ? `<button type="button" class="btn btn-secondary" data-action="tab" data-tab="emergency">${t.ui.openNow}</button>`
+              : `<button type="button" class="btn btn-primary" data-action="open-course" data-id="${c.id}">${t.ui.choose}</button>`
+            }
+          </article>
+        `).join("")}
+      </div>
+    </section>
+  `;
+}
+
+/* ============================================================
+   5. MODALS
+   ============================================================ */
+function sosModalHTML() {
+  const t = T();
+  return `
+    <div class="overlay" data-action="close-modal">
+      <div class="modal" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <h2>${t.ui.callTitle}</h2>
+          <button type="button" class="icon-btn" data-action="close-modal" aria-label="${t.ui.close}">✕</button>
+        </div>
+        <p class="modal-sub">${t.ui.callSub}</p>
+
+        <a class="call-btn call-112" href="tel:112">
+          <span class="call-num">112</span>
+          <span class="call-name">${t.ui.s112}</span>
+          <span class="call-arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="call-btn call-103" href="tel:103">
+          <span class="call-num">103</span>
+          <span class="call-name">${t.ui.s103}</span>
+          <span class="call-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <div class="memo">
+          <h3>${t.ui.memoTitle}</h3>
+          <ul>${t.ui.memo.map(m => `<li>${m}</li>`).join("")}</ul>
+        </div>
+
+        <p class="sos-note">${t.ui.sosNote}</p>
+      </div>
+    </div>
+  `;
+}
+
+function qrModalHTML() {
+  const t = T();
+  return `
+    <div class="overlay" data-action="close-modal">
+      <div class="modal" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <h2>${t.ui.qrScanning}</h2>
+          <button type="button" class="icon-btn" data-action="close-modal" aria-label="${t.ui.close}">✕</button>
+        </div>
+        <div class="qr-frame">
+          <span aria-hidden="true">▣</span>
+          <div class="qr-scanline"></div>
+        </div>
+        <p class="qr-center">${t.ui.qrResult}</p>
+      </div>
+    </div>
+  `;
+}
+
+function courseModalHTML(course) {
+  const t = T();
+  return `
+    <div class="overlay" data-action="close-modal">
+      <div class="modal" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <h2>${t.ui.requestTitle}</h2>
+          <button type="button" class="icon-btn" data-action="close-modal" aria-label="${t.ui.close}">✕</button>
+        </div>
+        <p class="modal-sub">${course.title} — <b>${course.price}</b></p>
+
+        <form id="leadForm" novalidate>
+          <div class="field">
+            <label for="fName">${t.ui.fName}</label>
+            <input id="fName" name="name" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="fPhone">${t.ui.fPhone}</label>
+            <input id="fPhone" name="phone" type="tel" required autocomplete="tel" placeholder="+7 ___ ___ __ __">
+          </div>
+          <div class="field">
+            <label for="fOrg">${t.ui.fOrg}</label>
+            <input id="fOrg" name="org" autocomplete="organization">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:16px">
+            ${t.ui.fSubmit}
+          </button>
+        </form>
+
+        <p class="sos-note" style="margin-top:12px">${t.ui.formNote}</p>
+      </div>
+    </div>
+  `;
+}
+
+function successModalHTML() {
+  const t = T();
+  return `
+    <div class="overlay" data-action="close-modal">
+      <div class="modal" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <h2>${t.ui.fSuccess}</h2>
+          <button type="button" class="icon-btn" data-action="close-modal" aria-label="${t.ui.close}">✕</button>
+        </div>
+        <p class="modal-sub">${t.ui.fSuccessText}</p>
+        <button type="button" class="btn btn-primary" style="width:100%;margin-top:20px" data-action="close-modal">
+          ${t.ui.close}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderModal() {
+  const root = $("#modalRoot");
+
+  if (!state.modal) {
+    root.innerHTML = "";
+    document.body.classList.remove("no-scroll");
+    return;
+  }
+
+  document.body.classList.add("no-scroll");
+
+  let html = "";
+  if (state.modal.type === "sos") html = sosModalHTML();
+  else if (state.modal.type === "qr") html = qrModalHTML();
+  else if (state.modal.type === "success") html = successModalHTML();
+  else if (state.modal.type === "course") {
+    const course = T().courses.find(c => c.id === state.modal.id);
+    if (course) html = courseModalHTML(course);
+  }
+
+  root.innerHTML = html;
+}
+
+function closeModal() {
+  if (qrTimer) {
+    clearTimeout(qrTimer);
+    qrTimer = null;
+  }
+  state.modal = null;
+  renderModal();
+}
+
+/* ============================================================
+   6. ACTIONS
+   ============================================================ */
+function setLang(lang) {
+  if (lang !== "ru" && lang !== "kz") return;
+  if (state.lang === lang) return;
+  state.lang = lang;
+  store.write({ lang });
+  render();
+}
+
+function setTab(tabId) {
+  state.tab = tabId;
+  if (tabId !== "emergency") state.scenarioId = null;
+  if (tabId !== "quiz") {
+    /* состояние квиза сохраняем, чтобы не терять прогресс */
+  }
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function openScenario(id) {
+  state.tab = "emergency";
+  state.scenarioId = id;
+  state.step = 0;
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function exitScenario() {
+  state.scenarioId = null;
+  state.step = 0;
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function prevStep() {
+  if (state.step > 0) {
+    state.step -= 1;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+function nextStep() {
+  const sc = T().scenarios.find(s => s.id === state.scenarioId);
+  if (!sc) return;
+  if (state.step < sc.steps.length - 1) {
+    state.step += 1;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } else {
+    exitScenario();
+  }
+}
+
+function openQR() {
+  state.modal = { type: "qr" };
+  renderModal();
+
+  qrTimer = setTimeout(() => {
+    qrTimer = null;
+    state.modal = null;
+    state.tab = "emergency";
+    state.scenarioId = "bleeding";
+    state.step = 0;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, 2200);
+}
+
+function answerQuiz(index) {
+  if (state.quizAnswered) return;
+  const q = T().quiz[state.quizIndex];
+  state.quizAnswered = true;
+  state.quizSelected = index;
+  if (index === q.correct) state.quizScore += 1;
+  render();
+}
+
+function nextQuiz() {
+  const total = T().quiz.length;
+  if (state.quizIndex < total - 1) {
+    state.quizIndex += 1;
+    state.quizAnswered = false;
+    state.quizSelected = null;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } else {
+    state.quizFinished = true;
+    const best = Math.max(store.read().quizBest || 0, state.quizScore);
+    store.write({
+      quizBest: best,
+      quizLast: state.quizScore,
+      quizDate: new Date().toISOString().slice(0, 10)
+    });
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+function retryQuiz() {
+  state.quizIndex = 0;
+  state.quizScore = 0;
+  state.quizAnswered = false;
+  state.quizSelected = null;
+  state.quizFinished = false;
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ============================================================
+   7. EVENT DELEGATION
+   ============================================================ */
+document.addEventListener("click", event => {
+  const el = event.target.closest("[data-action]");
+  if (!el) return;
+
+  const action = el.dataset.action;
+
+  switch (action) {
+    case "lang":
+      setLang(el.dataset.lang);
+      break;
+
+    case "tab":
+      setTab(el.dataset.tab);
+      break;
+
+    case "sos":
+      state.modal = { type: "sos" };
+      renderModal();
+      break;
+
+    case "close-modal":
+      /* закрываем только при клике по оверлею или по кнопке закрытия */
+      if (el.classList.contains("overlay") && event.target !== el) return;
+      closeModal();
+      break;
+
+    case "open-scenario":
+      openScenario(el.dataset.id);
+      break;
+
+    case "exit-scenario":
+      exitScenario();
+      break;
+
+    case "prev":
+      prevStep();
+      break;
+
+    case "next":
+      nextStep();
+      break;
+
+    case "qr":
+      openQR();
+      break;
+
+    case "quiz-answer":
+      answerQuiz(Number(el.dataset.index));
+      break;
+
+    case "quiz-next":
+      nextQuiz();
+      break;
+
+    case "quiz-retry":
+      retryQuiz();
+      break;
+
+    case "open-course":
+      state.modal = { type: "course", id: el.dataset.id };
+      renderModal();
+      break;
+
+    default:
+      break;
+  }
+});
+
+document.addEventListener("submit", event => {
+  if (event.target.id !== "leadForm") return;
+  event.preventDefault();
+
+  const name = ($("#fName") || {}).value || "";
+  const phone = ($("#fPhone") || {}).value || "";
+  const org = ($("#fOrg") || {}).value || "";
+
+  if (!name.trim() || !phone.trim()) {
+    const firstEmpty = !name.trim() ? $("#fName") : $("#fPhone");
+    if (firstEmpty) firstEmpty.focus();
+    return;
+  }
+
+  store.write({
+    lastLead: {
+      name: name.trim(),
+      phone: phone.trim(),
+      org: org.trim(),
+      courseId: state.modal ? state.modal.id : null,
+      date: new Date().toISOString()
+    }
+  });
+
+  state.modal = { type: "success" };
+  renderModal();
+});
+
+/* Закрытие модалок по Escape */
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && state.modal) closeModal();
+});
+
+/* ============================================================
+   8. RENDER ROOT + INIT
+   ============================================================ */
+function render() {
+  document.documentElement.lang = state.lang === "kz" ? "kk" : "ru";
+  document.title = state.lang === "kz"
+    ? "FirstAid KZ — алғашқы көмек офлайн"
+    : "FirstAid KZ — первая помощь офлайн";
+
+  renderHeader();
+  renderTabs();
+  renderMain();
+  renderModal();
+}
+
+function init() {
+  const saved = store.read();
+  if (saved.lang === "kz" || saved.lang === "ru") {
+    state.lang = saved.lang;
+  }
+  render();
+}
+
+init();
+</script>
+</body>
+</html>
